@@ -122,10 +122,19 @@ function ticmake() {
 
 stty -ixon
 alias less='less -SR'
-export PATH="/usr/lib/ccache:$PATH"
-export PATH="$PATH:/home/sehe/.local/bin"
+#export PATH="/usr/lib/ccache:$PATH"
+export PATH="/usr/lib/ccontrol:$PATH"
+export PATH="$PATH:/home/sehe/.local/bin:/home/sehe/bin"
 
 set -o vi
 #alias tmux="TERM=screen-256color tmux"
 source ~/.local/lib/python2.7/site-packages/powerline/bindings/bash/powerline.sh
 source /opt/vagrant/embedded/gems/gems/vagrant-1.8.6/contrib/bash/completion.sh
+function sqltop() { mysqladmin -uroot -proot -i 1 processlist "$@"; }
+
+export TI_ENABLE_VALGRIND=1
+alias docker_clean_images='docker rmi $(docker images -a --filter=dangling=true -q)'
+alias docker_clean_ps='docker rm $(docker ps --filter=status=exited --filter=status=created -q)'
+
+export GOPATH=$HOME/go
+export PATH=$PATH:$GOROOT/bin:$GOPATH/bin

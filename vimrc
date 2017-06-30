@@ -15,7 +15,7 @@ filetype indent on
 filetype plugin on
 syntax on
 behave xterm
-se ar aw nu et ts=4 sw=4 nosol so=5 diffopt=filler,iwhite,vertical si hls ut=400 nows nowrap sc ic scs
+se ar aw nu et ts=4 sw=4 nosol so=5 diffopt=filler,iwhite,vertical si hls ut=400 nows nowrap sc ic scs modeline
 setglobal undodir=/home/sehe/WORK/.vimundo 
 setglobal undofile
 se isfname-==
@@ -151,7 +151,7 @@ autocmd BufReadPre fugitive:///* let b:ycm_largefile=1
 "se wildmode=longest:full,list:full
 "se wildmenu
 
-command! StripTrailingWhitespace keeppatterns %s/\s\+$//g
+command! StripTrailingWhitespace keeppatterns %s/\s\+$//ge
 nnoremap <silent> <leader>b :CommandTMRU<CR>
 " when trawling git logs/blames, when you entered an individual side-by-side
 " diff, close the diff and return to the containing commit
@@ -159,4 +159,26 @@ nmap ZD hZZC
 
 nmap <leader>SQL /LIKE<CR>?AND<CR>y%:%s/\V<C-r>"/%clause%/g<CR>ggOclause=<Esc>p:w<Bar>ne<CR>
 
-nmap [32~ :grep -RI  *
+nmap [32~ :grep -RI  */
+
+" autocmd FileType c,cpp setlocal equalprg=clang-format-3.8
+" your favorite style options
+"let g:clang_format#auto_formatexpr=1
+let g:clang_format#style_options = {
+      \ "AccessModifierOffset" : -4,
+      \ "AllowShortIfStatementsOnASingleLine" : "true",
+      \ "AlwaysBreakTemplateDeclarations" : "true",
+      \ "Standard" : "C++14"}
+
+augroup ClangFormatSettings
+    autocmd!
+    " map to <Leader>cf in C++ code
+    autocmd FileType c,cpp,objc nnoremap <buffer><Leader>cf :<C-u>ClangFormat<CR>
+    autocmd FileType c,cpp,objc vnoremap <buffer><Leader>cf :ClangFormat<CR>
+    " if you install vim-operator-user
+    autocmd FileType c,cpp,objc map <buffer><Leader>x <Plug>(operator-clang-format)
+augroup END
+
+nnoremap <F3> :silent! !killall make<CR>
+set grepprg=ag\ --vimgrep\ $*
+set grepformat=%f:%l:%c:%m
